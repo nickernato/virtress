@@ -1,0 +1,10 @@
+{
+	"name":"SampleAsset",
+	"path":"/sample/asset",
+	"matchers": [
+		{
+			"type":"PATH",
+			"response":"{ \"sampleResponse\":\"sample response value\" }"
+		}
+	]
+}
