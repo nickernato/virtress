@@ -8,5 +8,6 @@ package com.virtress.assets;
  *
  */
 public enum MatcherType {
-	PATH;
+	PATH,
+	XPATH;
 }

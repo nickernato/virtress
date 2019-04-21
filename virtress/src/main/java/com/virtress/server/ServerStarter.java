@@ -40,6 +40,9 @@ public class ServerStarter {
 		
 		while (serverOn) {
 			try (Socket socket = serverSocket.accept()) {
+			    socket.setKeepAlive(true);
+			    socket.setSoLinger(true, 10000);
+				socket.setSoTimeout(10000);
 				InputStreamReader isr = new InputStreamReader(socket.getInputStream());
 				BufferedReader reader = new BufferedReader(isr);
 				boolean extractBody = false;
@@ -91,7 +94,7 @@ public class ServerStarter {
 			            + "Server: HTTP server/0.1\n"
 			            + "Date: "+format.format(new java.util.Date())+"\n"
 			      + "Content-type: application/json; charset=UTF-8\n"
-			            + "Content-Length: 38\n\n"
+			            + "Content-Length: " + (assetResponse.isEmpty() ? "0" : assetResponse.length()) + "\n\n"
 			            + (assetResponse.isEmpty() ? "{ \"status\":\"Asset not found\"" : assetResponse);
 			    BufferedWriter out = new BufferedWriter(
 			    	    new OutputStreamWriter(

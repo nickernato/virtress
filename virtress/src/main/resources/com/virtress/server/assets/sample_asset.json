@@ -3,8 +3,12 @@
 	"path":"/sample/asset",
 	"matchers": [
 		{
+			"type":"XPATH",
+			"response":"{ \"sampleResponse\":\"1st sample response value\" }"
+		},
+		{
 			"type":"PATH",
-			"response":"{ \"sampleResponse\":\"sample response value\" }"
+			"response":"{ \"sampleResponse\":\"2nd sample response value\" }"
 		}
 	]
 }
