@@ -9,7 +9,8 @@ package com.virtress.assets;
  */
 public class Matcher {
 	private MatcherType type;
-	private String response;
+	private String name;
+	private String value;
 	
 	public MatcherType getType() {
 		return type;
@@ -17,10 +18,16 @@ public class Matcher {
 	public void setType(MatcherType type) {
 		this.type = type;
 	}
-	public String getResponse() {
-		return response;
+	public String getName() {
+		return name;
 	}
-	public void setResponse(String response) {
-		this.response = response;
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

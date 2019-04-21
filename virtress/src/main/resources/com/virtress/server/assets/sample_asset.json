@@ -1,14 +1,32 @@
 {
 	"name":"SampleAsset",
 	"path":"/sample/asset",
-	"matchers": [
+	"groups": [
 		{
-			"type":"XPATH",
-			"response":"{ \"sampleResponse\":\"1st sample response value\" }"
+			"matchers": [
+				{
+					"type":"HEADER",
+					"name":"SampleHeader",
+					"value":"*"
+				},
+				{
+					"type":"HEADER",
+					"name":"SampleHeaderDos",
+					"value":"SampleHeaderValue"
+				},
+				{
+					"type":"PATH"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"1st sample response matching request headers and the path.\" }"
 		},
 		{
-			"type":"PATH",
-			"response":"{ \"sampleResponse\":\"2nd sample response value\" }"
+			"matchers": [
+				{
+					"type":"PATH"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"default sample response by matching the path.\" }"
 		}
 	]
 }

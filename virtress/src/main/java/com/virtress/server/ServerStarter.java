@@ -12,10 +12,12 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.virtress.assets.Asset;
 import com.virtress.assets.AssetLoader;
+import com.virtress.assets.Group;
 import com.virtress.assets.Matcher;
 import com.virtress.common.HttpRequestMethod;
 
@@ -45,6 +47,7 @@ public class ServerStarter {
 				socket.setSoTimeout(10000);
 				InputStreamReader isr = new InputStreamReader(socket.getInputStream());
 				BufferedReader reader = new BufferedReader(isr);
+				List<String> requestHeaders = new ArrayList<>();
 				boolean extractBody = false;
 				int bodyLength = 0;
 				String urlPath = "";
@@ -52,6 +55,7 @@ public class ServerStarter {
 				String line = "";
 				while ((line = reader.readLine()) != null && !line.isEmpty()) {
 					System.out.println(line);
+					requestHeaders.add(line);
 					buffer.append(line + "\r\n");
 					for (HttpRequestMethod method : HttpRequestMethod.values()) {
 						if (line.startsWith(method.name())) {
@@ -83,10 +87,12 @@ public class ServerStarter {
 			    List<Asset> allAssets = assetLoader.loadAssets();
 			    String assetResponse = "";
 			    for (Asset asset : allAssets) {
-			    	Matcher match = asset.getMatcherByPath(urlPath);
-			    	if (match != null) {
-			    		System.out.println("Setting assetResponse to matcher response: " + match.getResponse());
-			    		assetResponse = match.getResponse();
+			    	Group matchedGroup = asset.getGroup(urlPath, requestHeaders);
+			    	if (matchedGroup != null) {
+			    		System.out.println("Setting assetResponse to matcher response: " + matchedGroup.getResponse());
+			    		assetResponse = matchedGroup.getResponse();
+			    		// We found the matching asset response. No need to continue.
+			    		break;
 			    	}
 			    }
 			    SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:Ss z");

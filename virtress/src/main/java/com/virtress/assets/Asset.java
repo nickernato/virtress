@@ -12,7 +12,7 @@ import java.util.List;
 public class Asset {
 	private String name;
 	private String path;
-	private List<Matcher> matchers;
+	private List<Group> groups;
 	
 	public String getName() {
 		return name;
@@ -26,21 +26,44 @@ public class Asset {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public List<Matcher> getMatchers() {
-		return matchers;
+	public List<Group> getGroups() {
+		return groups;
 	}
-	public void setMatchers(List<Matcher> matchers) {
-		this.matchers = matchers;
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
 	}
 	
-	public Matcher getMatcherByPath(String urlPath) {
-		for (Matcher matcher : this.matchers) {
-			if (matcher.getType().name().equalsIgnoreCase(MatcherType.PATH.name())) {
-				if (path.equalsIgnoreCase(urlPath)) {
-					System.out.println("Matched asset for path " + urlPath);
-					System.out.println("Matched answer response: " + matcher.getResponse());
-					return matcher;
+	/**
+	 * Returns the first group that has all matching matchers.
+	 * @param urlPath
+	 * @param requestHeaders
+	 * @return
+	 */
+	public Group getGroup(String urlPath, List<String> requestHeaders) {
+		for (Group group : this.groups) {
+			boolean allMatchesPass = true;
+			for (Matcher matcher : group.getMatchers()) {
+				if (matcher.getType().name().equalsIgnoreCase(MatcherType.PATH.name())) {
+					if (!path.equalsIgnoreCase(urlPath)) {
+						allMatchesPass = false;
+					}
 				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.HEADER.name())) {
+					boolean foundMatchingHeader = false;
+					for (String header : requestHeaders) {
+						String[] headerInfo = header.split(":");
+						if (headerInfo[0].equals(matcher.getName()) && headerInfo[1].trim().equals(matcher.getValue())) {
+							System.out.println("Matched header: " + header);
+							foundMatchingHeader = true;
+						}
+					}
+					if (!foundMatchingHeader) {
+						allMatchesPass = false;
+					}
+				}
+			}
+			if (allMatchesPass) {
+				return group;
 			}
 		}
 		return null;
