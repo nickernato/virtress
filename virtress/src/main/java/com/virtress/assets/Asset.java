@@ -32,4 +32,17 @@ public class Asset {
 	public void setMatchers(List<Matcher> matchers) {
 		this.matchers = matchers;
 	}
+	
+	public Matcher getMatcherByPath(String urlPath) {
+		for (Matcher matcher : this.matchers) {
+			if (matcher.getType().name().equalsIgnoreCase(MatcherType.PATH.name())) {
+				if (path.equalsIgnoreCase(urlPath)) {
+					System.out.println("Matched asset for path " + urlPath);
+					System.out.println("Matched answer response: " + matcher.getResponse());
+					return matcher;
+				}
+			}
+		}
+		return null;
+	}
 }

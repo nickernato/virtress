@@ -12,8 +12,11 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
+import com.virtress.assets.Asset;
 import com.virtress.assets.AssetLoader;
+import com.virtress.assets.Matcher;
 import com.virtress.common.HttpRequestMethod;
 
 /**
@@ -41,11 +44,17 @@ public class ServerStarter {
 				BufferedReader reader = new BufferedReader(isr);
 				boolean extractBody = false;
 				int bodyLength = 0;
+				String urlPath = "";
 				StringBuffer buffer = new StringBuffer();
 				String line = "";
 				while ((line = reader.readLine()) != null && !line.isEmpty()) {
 					System.out.println(line);
 					buffer.append(line + "\r\n");
+					for (HttpRequestMethod method : HttpRequestMethod.values()) {
+						if (line.startsWith(method.name())) {
+							urlPath = line.split(" ")[1];
+						}
+					}
 					if (line.startsWith(HttpRequestMethod.POST.name())) {
 			            extractBody = true;
 			        }
@@ -67,15 +76,23 @@ public class ServerStarter {
 			    System.out.println(requestBody);
 			    
 			    // Send Response
-			    //AssetLoader assetLoader = new AssetLoader();
-			    //assetLoader.loadAssets();
+			    AssetLoader assetLoader = new AssetLoader();
+			    List<Asset> allAssets = assetLoader.loadAssets();
+			    String assetResponse = "";
+			    for (Asset asset : allAssets) {
+			    	Matcher match = asset.getMatcherByPath(urlPath);
+			    	if (match != null) {
+			    		System.out.println("Setting assetResponse to matcher response: " + match.getResponse());
+			    		assetResponse = match.getResponse();
+			    	}
+			    }
 			    SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:Ss z");
 			    String res = "HTTP/1.0 200 OK\n"
 			            + "Server: HTTP server/0.1\n"
 			            + "Date: "+format.format(new java.util.Date())+"\n"
 			      + "Content-type: application/json; charset=UTF-8\n"
 			            + "Content-Length: 38\n\n"
-			            + "{ \"status\":\"OK\" }";
+			            + (assetResponse.isEmpty() ? "{ \"status\":\"Asset not found\"" : assetResponse);
 			    BufferedWriter out = new BufferedWriter(
 			    	    new OutputStreamWriter(
 			    	        new BufferedOutputStream(socket.getOutputStream()), "UTF-8"));
