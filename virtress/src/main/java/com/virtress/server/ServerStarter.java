@@ -53,6 +53,7 @@ public class ServerStarter {
 				String urlPath = "";
 				StringBuffer buffer = new StringBuffer();
 				String line = "";
+				String httpMethod = "";
 				while ((line = reader.readLine()) != null && !line.isEmpty()) {
 					System.out.println(line);
 					requestHeaders.add(line);
@@ -60,6 +61,12 @@ public class ServerStarter {
 					for (HttpRequestMethod method : HttpRequestMethod.values()) {
 						if (line.startsWith(method.name())) {
 							urlPath = line.split(" ")[1];
+						}
+					}
+					String[] spacedArray = line.split(" ");
+					if (spacedArray.length > 0) {
+						if (HttpRequestMethod.contains(spacedArray[0])) {
+							httpMethod = spacedArray[0];
 						}
 					}
 					if (line.startsWith(HttpRequestMethod.POST.name())) {
@@ -86,8 +93,9 @@ public class ServerStarter {
 			    AssetLoader assetLoader = new AssetLoader();
 			    List<Asset> allAssets = assetLoader.loadAssets();
 			    String assetResponse = "";
+			    Group matchedGroup = null;
 			    for (Asset asset : allAssets) {
-			    	Group matchedGroup = asset.getGroup(urlPath, requestHeaders);
+			    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod);
 			    	if (matchedGroup != null) {
 			    		System.out.println("Setting assetResponse to matcher response: " + matchedGroup.getResponse());
 			    		assetResponse = matchedGroup.getResponse();
@@ -99,7 +107,7 @@ public class ServerStarter {
 			    String res = "HTTP/1.0 200 OK\n"
 			            + "Server: HTTP server/0.1\n"
 			            + "Date: "+format.format(new java.util.Date())+"\n"
-			      + "Content-type: application/json; charset=UTF-8\n"
+			      + "Content-type: " + (matchedGroup != null ? matchedGroup.getContentType() : "text/html")  + "; charset=UTF-8\n"
 			            + "Content-Length: " + (assetResponse.isEmpty() ? "0" : assetResponse.length()) + "\n\n"
 			            + (assetResponse.isEmpty() ? "{ \"status\":\"Asset not found\"" : assetResponse);
 			    BufferedWriter out = new BufferedWriter(

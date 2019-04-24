@@ -9,6 +9,7 @@ package com.virtress.assets;
  */
 public enum MatcherType {
 	HEADER,
+	HTTP_METHOD,
 	PATH,
 	XPATH;
 }

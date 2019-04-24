@@ -39,7 +39,7 @@ public class Asset {
 	 * @param requestHeaders
 	 * @return
 	 */
-	public Group getGroup(String urlPath, List<String> requestHeaders) {
+	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod) {
 		for (Group group : this.groups) {
 			boolean allMatchesPass = true;
 			for (Matcher matcher : group.getMatchers()) {
@@ -58,6 +58,11 @@ public class Asset {
 						}
 					}
 					if (!foundMatchingHeader) {
+						allMatchesPass = false;
+					}
+				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.HTTP_METHOD.name())) {
+					if (!matcher.getValue().equals(httpMethod)) {
 						allMatchesPass = false;
 					}
 				}

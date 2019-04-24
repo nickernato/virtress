@@ -5,6 +5,11 @@
 		{
 			"matchers": [
 				{
+					"type":"HTTP_METHOD",
+					"name":"httpMethod",
+					"value":"GET"
+				},
+				{
 					"type":"HEADER",
 					"name":"SampleHeader",
 					"value":"*"
@@ -18,7 +23,27 @@
 					"type":"PATH"
 				}
 			],
-			"response":"{ \"sampleResponse\":\"1st sample response matching request headers and the path.\" }"
+			"response":"{ \"sampleResponse\":\"GET sample response matching request headers and the path.\" }",
+			"contentType":"application/json"
+		},
+		{
+			"matchers": [
+				{
+					"type":"HEADER",
+					"name":"SampleHeader",
+					"value":"*"
+				},
+				{
+					"type":"HEADER",
+					"name":"SampleHeaderDos",
+					"value":"SampleHeaderValue"
+				},
+				{
+					"type":"PATH"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"1st sample response matching request headers and the path.\" }",
+			"contentType":"application/json"
 		},
 		{
 			"matchers": [
@@ -26,7 +51,8 @@
 					"type":"PATH"
 				}
 			],
-			"response":"{ \"sampleResponse\":\"default sample response by matching the path.\" }"
+			"response":"{ \"sampleResponse\":\"default sample response by matching the path.\" }",
+			"contentType":"application/json"
 		}
 	]
 }
