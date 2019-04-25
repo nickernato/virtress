@@ -6,7 +6,6 @@
 			"matchers": [
 				{
 					"type":"HTTP_METHOD",
-					"name":"httpMethod",
 					"value":"GET"
 				},
 				{
@@ -38,6 +37,10 @@
 		},
 		{
 			"matchers": [
+				{
+					"type":"REQUEST_CONTAINS",
+					"value":"\"matchVar\":\"matchValue\""
+				},
 				{
 					"type":"HEADER",
 					"name":"SampleHeader",

@@ -5,6 +5,8 @@ package com.virtress.assets;
 
 import java.util.List;
 
+import com.virtress.common.HttpRequestMethod;
+
 /**
  * @author ThisIsDef
  *
@@ -39,7 +41,7 @@ public class Asset {
 	 * @param requestHeaders
 	 * @return
 	 */
-	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod) {
+	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod, String responseBody) {
 		for (Group group : this.groups) {
 			boolean allMatchesPass = true;
 			for (Matcher matcher : group.getMatchers()) {
@@ -63,6 +65,11 @@ public class Asset {
 				}
 				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.HTTP_METHOD.name())) {
 					if (!matcher.getValue().equals(httpMethod)) {
+						allMatchesPass = false;
+					}
+				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.REQUEST_CONTAINS.name())) {
+					if (!responseBody.contains(matcher.getValue())) {
 						allMatchesPass = false;
 					}
 				}

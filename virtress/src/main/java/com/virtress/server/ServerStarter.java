@@ -95,7 +95,7 @@ public class ServerStarter {
 			    String assetResponse = "";
 			    Group matchedGroup = null;
 			    for (Asset asset : allAssets) {
-			    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod);
+			    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod, requestBody);
 			    	if (matchedGroup != null) {
 			    		System.out.println("Setting assetResponse to matcher response: " + matchedGroup.getResponse());
 			    		assetResponse = matchedGroup.getResponse();
