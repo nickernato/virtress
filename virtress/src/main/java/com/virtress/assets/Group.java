@@ -12,6 +12,7 @@ import java.util.List;
 public class Group {
 
 	private List<Matcher> matchers;
+	private List<Header> responseHeaders;
 	private String response;
 	private String contentType;
 	public List<Matcher> getMatchers() {
@@ -19,6 +20,12 @@ public class Group {
 	}
 	public void setMatchers(List<Matcher> matchers) {
 		this.matchers = matchers;
+	}
+	public List<Header> getResponseHeaders() {
+		return responseHeaders;
+	}
+	public void setResponseHeaders(List<Header> responseHeaders) {
+		this.responseHeaders = responseHeaders;
 	}
 	public String getResponse() {
 		return response;

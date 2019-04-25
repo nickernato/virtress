@@ -18,7 +18,7 @@ import java.util.List;
 import com.virtress.assets.Asset;
 import com.virtress.assets.AssetLoader;
 import com.virtress.assets.Group;
-import com.virtress.assets.Matcher;
+import com.virtress.assets.Header;
 import com.virtress.common.HttpRequestMethod;
 
 /**
@@ -108,8 +108,14 @@ public class ServerStarter {
 			            + "Server: HTTP server/0.1\n"
 			            + "Date: "+format.format(new java.util.Date())+"\n"
 			      + "Content-type: " + (matchedGroup != null ? matchedGroup.getContentType() : "text/html")  + "; charset=UTF-8\n"
-			            + "Content-Length: " + (assetResponse.isEmpty() ? "0" : assetResponse.length()) + "\n\n"
-			            + (assetResponse.isEmpty() ? "{ \"status\":\"Asset not found\"" : assetResponse);
+			            + "Content-Length: " + (assetResponse.isEmpty() ? "0" : assetResponse.length()) + "\n";
+			    if (matchedGroup.getResponseHeaders() != null) {
+			    	for (Header responseHeader : matchedGroup.getResponseHeaders()) {
+			    		res += responseHeader.getName() + ": " + responseHeader.getValue() + "\n";
+			    	}
+			    }
+			    res += "\n"; // Separates the response headers from the body.
+			    res += (assetResponse.isEmpty() ? "{ \"status\":\"Asset not found\"" : assetResponse);
 			    BufferedWriter out = new BufferedWriter(
 			    	    new OutputStreamWriter(
 			    	        new BufferedOutputStream(socket.getOutputStream()), "UTF-8"));

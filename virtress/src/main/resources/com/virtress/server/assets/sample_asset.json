@@ -23,6 +23,16 @@
 					"type":"PATH"
 				}
 			],
+			"responseHeaders": [
+				{
+					"name":"CustomResponseHeader",
+					"value":"CustomValue"
+				},
+				{
+					"name":"CustomResponseHeader2",
+					"value":"CustomValue2"
+				}
+			],
 			"response":"{ \"sampleResponse\":\"GET sample response matching request headers and the path.\" }",
 			"contentType":"application/json"
 		},
