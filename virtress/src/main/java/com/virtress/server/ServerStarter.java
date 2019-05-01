@@ -20,6 +20,7 @@ import com.virtress.assets.AssetLoader;
 import com.virtress.assets.Group;
 import com.virtress.assets.Header;
 import com.virtress.common.HttpRequestMethod;
+import com.virtress.common.HttpResponseCode;
 
 /**
  * @author ThisIsDef
@@ -104,7 +105,7 @@ public class ServerStarter {
 			    	}
 			    }
 			    SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:Ss z");
-			    String res = "HTTP/1.0 200 OK\n"
+			    String res = "HTTP/1.0 " + matchedGroup.getResponseCode()  + " " + HttpResponseCode.getHttpResponseCode(matchedGroup.getResponseCode()).name() + "\n"
 			            + "Server: HTTP server/0.1\n"
 			            + "Date: "+format.format(new java.util.Date())+"\n"
 			      + "Content-type: " + (matchedGroup != null ? matchedGroup.getContentType() : "text/html")  + "; charset=UTF-8\n"

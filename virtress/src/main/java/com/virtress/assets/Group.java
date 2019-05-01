@@ -15,6 +15,7 @@ public class Group {
 	private List<Header> responseHeaders;
 	private String response;
 	private String contentType;
+	private String responseCode;
 	public List<Matcher> getMatchers() {
 		return matchers;
 	}
@@ -38,5 +39,11 @@ public class Group {
 	}
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+	public String getResponseCode() {
+		return responseCode;
+	}
+	public void setResponseCode(String responseCode) {
+		this.responseCode = responseCode;
 	}
 }

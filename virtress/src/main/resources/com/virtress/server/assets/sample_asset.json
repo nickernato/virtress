@@ -21,7 +21,7 @@
 				{
 					"type":"PATH"
 				}
-			],
+			], 
 			"responseHeaders": [
 				{
 					"name":"CustomResponseHeader",
@@ -33,7 +33,8 @@
 				}
 			],
 			"response":"{ \"sampleResponse\":\"GET sample response matching request headers and the path.\" }",
-			"contentType":"application/json"
+			"contentType":"application/json",
+			"responseCode":"200"
 		},
 		{
 			"matchers": [
@@ -56,7 +57,8 @@
 				}
 			],
 			"response":"{ \"sampleResponse\":\"1st sample response matching request headers and the path.\" }",
-			"contentType":"application/json"
+			"contentType":"application/json",
+			"responseCode":"200"
 		},
 		{
 			"matchers": [
@@ -65,7 +67,8 @@
 				}
 			],
 			"response":"{ \"sampleResponse\":\"default sample response by matching the path.\" }",
-			"contentType":"application/json"
+			"contentType":"application/json",
+			"responseCode":"200"
 		}
 	]
 }
