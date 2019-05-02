@@ -17,3 +17,7 @@ Virtress is a virtual server that takes in requests and matches criteria given t
 - Configure the port through program arguments or through the server config located in /com/virtress/server/config/virtress_config.json.
   - Configuring the port through program arguments will override the port configured in virtress_config.json.
   - The default port if no configuration is specified is 2800.
+- Start your first group
+  - Create an asset under com/virtress/server/assets
+  - There's a sample_asset.json to reference for help
+  - Virtress loads all assets and will match the first group with all matching matchers within the first matched asset.
