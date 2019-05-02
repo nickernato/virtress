@@ -21,21 +21,50 @@ import com.virtress.assets.Group;
 import com.virtress.assets.Header;
 import com.virtress.common.HttpRequestMethod;
 import com.virtress.common.HttpResponseCode;
+import com.virtress.server.config.ConfigurationLoader;
+import com.virtress.server.config.ServerConfig;
 
 /**
  * @author ThisIsDef
  *
  */
 public class ServerStarter {
+	
+	private static int defaultPort = 2800;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		int port = defaultPort;
+		for (String arg : args) 
+		{
+			if (arg.startsWith("port")) 
+			{
+				try 
+				{
+					port = Integer.parseInt(arg.split("=")[1]);
+				}
+				catch (Exception ex) 
+				{
+					System.out.println("Failed to parse port from program argument. Please use \"port=" + defaultPort + "\" Using the default port (2800).");
+				}
+			}
+		}
+		
+		ConfigurationLoader configLoader = new ConfigurationLoader();
+		ServerConfig serverConfig = configLoader.loadServerConfig();
+		if (port == defaultPort) {
+			if (serverConfig != null) {
+				port = serverConfig.getPort();
+			}
+		}
+		
 		boolean serverOn = true;
 		ServerSocket serverSocket = null;
 		try {
-			serverSocket = new ServerSocket(2800);
+			serverSocket = new ServerSocket(port);
+			System.out.println("Server started on port " + port + ".");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			System.out.println("Unable to create server socket.");

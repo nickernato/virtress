@@ -5,8 +5,6 @@ package com.virtress.assets;
 
 import java.util.List;
 
-import com.virtress.common.HttpRequestMethod;
-
 /**
  * @author ThisIsDef
  *

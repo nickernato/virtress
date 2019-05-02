@@ -23,7 +23,6 @@ public class AssetLoader {
 		List<Asset> allAssets = new ArrayList<>();
 
 		for (String assetFileName : getResourceFiles(assetsPath)) {
-			System.out.println("FOUND ASSET: " + assetFileName);
 			// Load assets here
 			ObjectMapper mapper = new ObjectMapper();
 			InputStream is = Asset.class.getResourceAsStream(assetsPath + assetFileName);
@@ -50,7 +49,6 @@ public class AssetLoader {
 			}
 		} catch (IOException e) {
 			System.out.println("Error while reading buffered reader.");
-			e.printStackTrace();
 		}
 
 		return filenames;
