@@ -9,3 +9,4 @@ Virtress is a virtual server that takes in requests and matches criteria given t
   - Match Request Headers
 - Return response from matching group
 - Return content type from matching group
+- Return response code from matching group
