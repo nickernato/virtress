@@ -1,4 +1,4 @@
-# virtress
+# Virtress
 Virtress is a virtual server that takes in requests and matches criteria given to return the matching response.
 # Features
 - Creates groups of matches to respond with the specified response if a group matches.
