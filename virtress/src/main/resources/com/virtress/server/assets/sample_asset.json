@@ -63,6 +63,17 @@
 		{
 			"matchers": [
 				{
+					"type":"XPATH",
+					"value":"/bookstore/book[price>35.00]/title"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"XPATH matcher sample response.\" }",
+			"contentType":"application/json",
+			"responseCode":"200"
+		},
+		{
+			"matchers": [
+				{
 					"type":"PATH"
 				}
 			],

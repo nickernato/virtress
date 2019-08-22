@@ -5,6 +5,9 @@ package com.virtress.assets;
 
 import java.util.List;
 
+import com.virtress.utils.Converter;
+import com.virtress.utils.XpathParser;
+
 /**
  * @author ThisIsDef
  *
@@ -39,7 +42,7 @@ public class Asset {
 	 * @param requestHeaders
 	 * @return
 	 */
-	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod, String responseBody) {
+	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod, String requestBody) {
 		for (Group group : this.groups) {
 			boolean allMatchesPass = true;
 			for (Matcher matcher : group.getMatchers()) {
@@ -67,7 +70,13 @@ public class Asset {
 					}
 				}
 				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.REQUEST_CONTAINS.name())) {
-					if (!responseBody.contains(matcher.getValue())) {
+					if (!requestBody.contains(matcher.getValue())) {
+						allMatchesPass = false;
+					}
+				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.XPATH.name())) {
+					String xml = Converter.jsonToXML(requestBody);
+					if (!XpathParser.parseXmlForBoolean(xml, matcher.getValue())) {
 						allMatchesPass = false;
 					}
 				}
