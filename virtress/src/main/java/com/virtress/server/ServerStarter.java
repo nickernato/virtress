@@ -84,6 +84,7 @@ public class ServerStarter {
 				StringBuffer buffer = new StringBuffer();
 				String line = "";
 				String httpMethod = "";
+				String contentType = "";
 				while ((line = reader.readLine()) != null && !line.isEmpty()) {
 					System.out.println(line);
 					requestHeaders.add(line);
@@ -102,8 +103,11 @@ public class ServerStarter {
 					if (line.startsWith(HttpRequestMethod.POST.name())) {
 			            extractBody = true;
 			        }
-			        if (line.toLowerCase().startsWith("content-length:")) {
+					if (line.toLowerCase().startsWith("content-length:")) {
 			            bodyLength = Integer.valueOf(line.substring(line.indexOf(' ') + 1));
+			        }
+					if (line.toLowerCase().startsWith("content-type:")) {
+			            contentType = line.substring(line.indexOf(' ') + 1);
 			        }
 				}
 				
@@ -125,7 +129,7 @@ public class ServerStarter {
 			    String assetResponse = "";
 			    Group matchedGroup = null;
 			    for (Asset asset : allAssets) {
-			    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod, requestBody);
+			    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod, requestBody, contentType);
 			    	if (matchedGroup != null) {
 			    		System.out.println("Setting assetResponse to matcher response: " + matchedGroup.getResponse());
 			    		assetResponse = matchedGroup.getResponse();

@@ -42,7 +42,8 @@ public class Asset {
 	 * @param requestHeaders
 	 * @return
 	 */
-	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod, String requestBody) {
+	public Group getGroup(String urlPath, List<String> requestHeaders, String httpMethod, String requestBody,
+							String contentType) {
 		for (Group group : this.groups) {
 			boolean allMatchesPass = true;
 			for (Matcher matcher : group.getMatchers()) {
@@ -75,7 +76,12 @@ public class Asset {
 					}
 				}
 				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.XPATH.name())) {
-					String xml = Converter.jsonToXML(requestBody);
+					String xml = requestBody;
+					if (contentType.toLowerCase().contains("json")) {
+						String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+						xml = xmlProlog + Converter.jsonToXML(requestBody);
+					}
+					System.out.println("JSON:\n" + requestBody);
 					if (!XpathParser.parseXmlForBoolean(xml, matcher.getValue())) {
 						allMatchesPass = false;
 					}

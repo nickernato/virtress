@@ -4,6 +4,7 @@
 package com.virtress.utils;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,6 +15,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -36,25 +38,25 @@ public class XpathParser
 		try
 		{
 			builder = builderFactory.newDocumentBuilder();
-			xmlDocument = builder.parse(xml);
+			xmlDocument = builder.parse(new InputSource(new StringReader(xml)));
 			XPath xPath = XPathFactory.newInstance().newXPath();
 			foundMatch = (boolean) xPath.compile(xpath).evaluate(xmlDocument, XPathConstants.BOOLEAN);
 		}
 		catch (XPathExpressionException e)
 		{
-			System.out.println("There was an exception while parsing the XPATH for " + xpath);
+			System.out.println("There was an exception while parsing the XPATH for " + xpath + " Error: " + e.getMessage());
 		}
 		catch (IOException e)
 		{
-			System.out.println("There was an error reading in xml to parse with xpath.");
+			System.out.println("There was an error reading in xml to parse with xpath: " + e.getMessage());
 		}
 		catch (SAXException e)
 		{
-			System.out.println("There was a SAX exception while parsing xml.");
+			System.out.println("There was a SAX exception while parsing xml: " + e.getMessage());
 		}
 		catch (ParserConfigurationException e)
 		{
-			System.out.println("There was an error while creating the build factory for xml.");
+			System.out.println("There was an error while creating the build factory for xml: " + e.getMessage());
 		}
 		return foundMatch;
 	}
