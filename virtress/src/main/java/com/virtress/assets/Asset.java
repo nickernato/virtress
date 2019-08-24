@@ -13,6 +13,7 @@ import com.virtress.utils.XpathParser;
  *
  */
 public class Asset {
+	private final String EMPTY_STRING = "";
 	private String name;
 	private String path;
 	private List<Group> groups;
@@ -76,13 +77,19 @@ public class Asset {
 					}
 				}
 				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.XPATH.name())) {
-					String xml = requestBody;
-					if (contentType.toLowerCase().contains("json")) {
-						String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-						xml = xmlProlog + Converter.jsonToXML(requestBody);
+					if (!EMPTY_STRING.equals(requestBody)) {
+						String xml = requestBody;
+						if (contentType.toLowerCase().contains("json")) {
+							String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+							xml = xmlProlog + Converter.jsonToXML(requestBody);
+						}
+						System.out.println("JSON:\n" + requestBody);
+						if (!XpathParser.parseXmlForBoolean(xml, matcher.getValue())) {
+							allMatchesPass = false;
+						}
 					}
-					System.out.println("JSON:\n" + requestBody);
-					if (!XpathParser.parseXmlForBoolean(xml, matcher.getValue())) {
+					else
+					{
 						allMatchesPass = false;
 					}
 				}

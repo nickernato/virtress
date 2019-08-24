@@ -128,25 +128,32 @@ public class ServerStarter {
 			    List<Asset> allAssets = assetLoader.loadAssets();
 			    String assetResponse = "";
 			    Group matchedGroup = null;
-			    for (Asset asset : allAssets) {
-			    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod, requestBody, contentType);
-			    	if (matchedGroup != null) {
-			    		System.out.println("Setting assetResponse to matcher response: " + matchedGroup.getResponse());
-			    		assetResponse = matchedGroup.getResponse();
-			    		// We found the matching asset response. No need to continue.
-			    		break;
-			    	}
+			    String res = "";
+			    try {
+				    for (Asset asset : allAssets) {
+				    	matchedGroup = asset.getGroup(urlPath, requestHeaders, httpMethod, requestBody, contentType);
+				    	if (matchedGroup != null) {
+				    		System.out.println("Setting assetResponse to matcher response: " + matchedGroup.getResponse());
+				    		assetResponse = matchedGroup.getResponse();
+				    		// We found the matching asset response. No need to continue.
+				    		break;
+				    	}
+				    }
+				    SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:Ss z");
+				    res = "HTTP/1.0 " + matchedGroup.getResponseCode()  + " " + HttpResponseCode.getHttpResponseCode(matchedGroup.getResponseCode()).name() + "\n"
+				            + "Server: HTTP server/0.1\n"
+				            + "Date: "+format.format(new java.util.Date())+"\n"
+				      + "Content-type: " + (matchedGroup != null ? matchedGroup.getContentType() : "text/html")  + "; charset=UTF-8\n"
+				            + "Content-Length: " + (assetResponse.isEmpty() ? "0" : assetResponse.length()) + "\n";
+				    if (matchedGroup.getResponseHeaders() != null) {
+				    	for (Header responseHeader : matchedGroup.getResponseHeaders()) {
+				    		res += responseHeader.getName() + ": " + responseHeader.getValue() + "\n";
+				    	}
+				    }
 			    }
-			    SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:Ss z");
-			    String res = "HTTP/1.0 " + matchedGroup.getResponseCode()  + " " + HttpResponseCode.getHttpResponseCode(matchedGroup.getResponseCode()).name() + "\n"
-			            + "Server: HTTP server/0.1\n"
-			            + "Date: "+format.format(new java.util.Date())+"\n"
-			      + "Content-type: " + (matchedGroup != null ? matchedGroup.getContentType() : "text/html")  + "; charset=UTF-8\n"
-			            + "Content-Length: " + (assetResponse.isEmpty() ? "0" : assetResponse.length()) + "\n";
-			    if (matchedGroup.getResponseHeaders() != null) {
-			    	for (Header responseHeader : matchedGroup.getResponseHeaders()) {
-			    		res += responseHeader.getName() + ": " + responseHeader.getValue() + "\n";
-			    	}
+			    catch (NullPointerException npe) {
+			    	// Usually has a first loop trigger and can't find assets.
+			    	System.out.println("There was an error matching an asset: " + npe.getMessage());
 			    }
 			    res += "\n"; // Separates the response headers from the body.
 			    res += (assetResponse.isEmpty() ? "{ \"status\":\"Asset not found\"" : assetResponse);
