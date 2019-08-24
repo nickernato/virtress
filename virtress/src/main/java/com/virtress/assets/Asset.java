@@ -50,7 +50,8 @@ public class Asset {
 			boolean allMatchesPass = true;
 			for (Matcher matcher : group.getMatchers()) {
 				if (matcher.getType().name().equalsIgnoreCase(MatcherType.PATH.name())) {
-					if (!path.equalsIgnoreCase(urlPath)) {
+					String withoutParams = urlPath.split("\\?")[0];
+					if (!path.equals(withoutParams)) {
 						allMatchesPass = false;
 					}
 				}
@@ -98,6 +99,25 @@ public class Asset {
 					Pattern regex = Pattern.compile(matcher.getValue());
 					java.util.regex.Matcher match = regex.matcher(requestBody);
 					if (!match.find()) {
+						allMatchesPass = false;
+					}
+				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.URL_PARAM.name())) {
+					boolean foundUrlParam = false;
+					String[] urlSplit = urlPath.split("\\?");
+					if (urlSplit.length > 1) {
+						String paramsString = urlSplit[1];
+						String[] sets = paramsString.split("&");
+						for (String set : sets) {
+							String[] keyValue = set.split("=");
+							String variable = keyValue[0];
+							String value = keyValue[1];
+							if (variable.equals(matcher.getName()) && value.equals(matcher.getValue())) {
+								foundUrlParam = true;
+							}
+						}
+					}
+					if (!foundUrlParam) {
 						allMatchesPass = false;
 					}
 				}

@@ -85,6 +85,18 @@
 		{
 			"matchers": [
 				{
+					"type":"URL_PARAM",
+					"name":"testVar",
+					"value":"sampleParamData"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"URL Param matcher sample response.\" }",
+			"contentType":"application/json",
+			"responseCode":"200"
+		},
+		{
+			"matchers": [
+				{
 					"type":"PATH"
 				}
 			],

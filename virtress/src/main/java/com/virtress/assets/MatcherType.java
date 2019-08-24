@@ -13,5 +13,6 @@ public enum MatcherType {
 	PATH,
 	REQUEST_CONTAINS,
 	XPATH,
-	REGEX_BODY;
+	REGEX_BODY,
+	URL_PARAM;
 }
