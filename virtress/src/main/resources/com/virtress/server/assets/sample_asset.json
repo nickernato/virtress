@@ -74,6 +74,17 @@
 		{
 			"matchers": [
 				{
+					"type":"REGEX_BODY",
+					"value":"\\Wregex\\W:\\W\\w{5}\\W"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"REGEX Body matcher sample response.\" }",
+			"contentType":"application/json",
+			"responseCode":"200"
+		},
+		{
+			"matchers": [
+				{
 					"type":"PATH"
 				}
 			],

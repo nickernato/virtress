@@ -4,6 +4,7 @@
 package com.virtress.assets;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.virtress.utils.Converter;
 import com.virtress.utils.XpathParser;
@@ -90,6 +91,13 @@ public class Asset {
 					}
 					else
 					{
+						allMatchesPass = false;
+					}
+				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.REGEX_BODY.name())) {
+					Pattern regex = Pattern.compile(matcher.getValue());
+					java.util.regex.Matcher match = regex.matcher(requestBody);
+					if (!match.find()) {
 						allMatchesPass = false;
 					}
 				}

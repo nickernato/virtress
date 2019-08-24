@@ -12,5 +12,6 @@ public enum MatcherType {
 	HTTP_METHOD,
 	PATH,
 	REQUEST_CONTAINS,
-	XPATH;
+	XPATH,
+	REGEX_BODY;
 }
