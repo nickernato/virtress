@@ -6,6 +6,10 @@ package com.virtress.assets;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import com.virtress.utils.Converter;
 import com.virtress.utils.XpathParser;
 
@@ -118,6 +122,28 @@ public class Asset {
 						}
 					}
 					if (!foundUrlParam) {
+						allMatchesPass = false;
+					}
+				}
+				else if (matcher.getType().name().equalsIgnoreCase(MatcherType.CUSTOM_SCRIPT.name())) {
+					ScriptEngineManager manager = new ScriptEngineManager();      
+					ScriptEngine engine  = manager.getEngineByName("JavaScript");
+			        String script = matcher.getValue();
+			        boolean matched = false;
+					try
+					{
+			        	engine.put("requestBody", requestBody);
+			        	engine.put("urlPath", urlPath);
+			        	engine.put("requestHeaders", requestHeaders);
+			        	engine.put("requestHttpMethod", httpMethod);
+			        	engine.put("contentType", contentType);
+			        	matched = (boolean) engine.eval(script);
+					} catch (ScriptException e1)
+					{
+						System.out.println("Custom script error: " + e1.getMessage());
+					}
+					
+					if (!matched) {
 						allMatchesPass = false;
 					}
 				}

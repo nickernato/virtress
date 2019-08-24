@@ -14,5 +14,6 @@ public enum MatcherType {
 	REQUEST_CONTAINS,
 	XPATH,
 	REGEX_BODY,
-	URL_PARAM;
+	URL_PARAM,
+	CUSTOM_SCRIPT;
 }

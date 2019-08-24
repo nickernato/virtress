@@ -97,6 +97,17 @@
 		{
 			"matchers": [
 				{
+					"type":"CUSTOM_SCRIPT",
+					"value":"requestBody.contains('customTest');"
+				}
+			],
+			"response":"{ \"sampleResponse\":\"Custom Script matcher sample response.\" }",
+			"contentType":"application/json",
+			"responseCode":"200"
+		},
+		{
+			"matchers": [
+				{
 					"type":"PATH"
 				}
 			],
